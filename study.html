@@ -1,0 +1,667 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLAR LAB | Smart Sundial</title>
+
+<style>
+:root {
+  --green: #234b3c;
+  --light: #f5f3e9;
+  --orange: #d77b42;
+  --text: #24342d;
+  --muted: #718078;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--light);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+header {
+  background: var(--green);
+  color: white;
+  padding: 25px 7%;
+}
+
+.brand {
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: #d9c49d;
+}
+
+header h1 {
+  font-size: 34px;
+  margin-top: 8px;
+}
+
+header p {
+  color: #e1e9e3;
+  max-width: 650px;
+  margin-top: 8px;
+}
+
+main {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
+
+.intro {
+  margin-bottom: 25px;
+}
+
+.intro h2 {
+  font-size: 23px;
+  color: var(--green);
+}
+
+.intro p {
+  color: var(--muted);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 5px 20px #24342d0c;
+}
+
+.panel h3 {
+  color: var(--green);
+  margin-bottom: 17px;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #d9dfd9;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.primary {
+  background: var(--green);
+  color: white;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.secondary {
+  background: #e9eee9;
+  color: var(--green);
+}
+
+.dial-area {
+  text-align: center;
+}
+
+#dial {
+  width: 100%;
+  max-width: 530px;
+  background: #faf9f3;
+  border-radius: 12px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.metric {
+  background: #f5f7f3;
+  padding: 13px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.metric small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.metric strong {
+  display: block;
+  color: var(--green);
+  font-size: 20px;
+  margin-top: 4px;
+}
+
+.status {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f5f3e9;
+  color: var(--green);
+  font-size: 13px;
+  text-align: left;
+}
+
+.history {
+  margin-top: 22px;
+}
+
+.history table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.history th, .history td {
+  padding: 10px 6px;
+  text-align: left;
+  border-bottom: 1px solid #e8ece7;
+}
+
+.history th {
+  color: var(--muted);
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media(max-width: 750px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  header h1 {
+    font-size: 27px;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">SOLAR LAB · LEARN BY OBSERVING</div>
+  <h1>Smart Sundial</h1>
+  <p>
+    Explore the relationship between the Sun, time and shadows
+    through a simple interactive sundial model.
+  </p>
+</header>
+
+<main>
+  <section class="intro">
+    <h2>Solar Observation Studio</h2>
+    <p>
+      Enter a location and time to estimate the Sun's position
+      and observe how a sundial shadow changes.
+    </p>
+  </section>
+
+  <div class="layout">
+
+    <section class="panel">
+      <h3>Observation Settings</h3>
+
+      <div class="field">
+        <label for="latitude">Latitude (°)</label>
+        <input id="latitude" type="number" value="22.08"
+          min="-90" max="90" step="0.01">
+      </div>
+
+      <div class="field">
+        <label for="longitude">Longitude (°)</label>
+        <input id="longitude" type="number" value="82.15"
+          min="-180" max="180" step="0.01">
+      </div>
+
+      <div class="field">
+        <label for="date">Observation Date</label>
+        <input id="date" type="date">
+      </div>
+
+      <div class="field">
+        <label for="time">Local Time</label>
+        <input id="time" type="time" value="12:00">
+      </div>
+
+      <div class="field">
+        <label for="offset">UTC Offset (hours)</label>
+        <input id="offset" type="number" value="5.5"
+          min="-12" max="14" step="0.5">
+      </div>
+
+      <div class="field">
+        <label for="height">Gnomon Height (cm)</label>
+        <input id="height" type="number" value="10"
+          min="1" max="100" step="1">
+      </div>
+
+      <button class="primary" onclick="calculate()">
+        Calculate Sun Position
+      </button>
+    </section>
+
+    <section class="panel dial-area">
+      <h3>Live Sundial View</h3>
+
+      <canvas id="dial" width="600" height="430"></canvas>
+
+      <div class="metrics">
+        <div class="metric">
+          <small>Solar Elevation</small>
+          <strong id="elevation">--°</strong>
+        </div>
+
+        <div class="metric">
+          <small>Shadow Length</small>
+          <strong id="shadow">-- cm</strong>
+        </div>
+
+        <div class="metric">
+          <small>Shadow Bearing</small>
+          <strong id="bearing">--°</strong>
+        </div>
+      </div>
+
+      <div class="status" id="status">
+        Enter your observation details and calculate the Sun position.
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:15px;">
+        <button class="secondary" onclick="saveObservation()">
+          Save Observation
+        </button>
+        <button class="secondary" onclick="downloadCSV()">
+          Export CSV
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <section class="panel history">
+    <h3>Observation History</h3>
+    <div id="historyText" style="color:#718078;font-size:13px;">
+      No observations saved yet.
+    </div>
+    <div style="overflow-x:auto;">
+      <table id="historyTable" hidden>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Elevation</th>
+            <th>Shadow</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  SOLAR LAB · An educational solar observation project
+  <br>
+  Calculations are approximate and intended for learning.
+</footer>
+
+<script>
+let currentResult = null;
+let observations = [];
+
+const $ = id => document.getElementById(id);
+
+function dayNumber(date) {
+  const start = new Date(date.getFullYear(), 0, 0);
+  const diff = date - start;
+  return Math.floor(diff / 86400000);
+}
+
+function calculateSun(lat, lon, date, hour, minute, offset) {
+  const day = dayNumber(date);
+
+  // Approximate solar declination
+  const gamma = 2 * Math.PI / 365 * (day - 1);
+  const declination =
+    0.006918
+    - 0.399912 * Math.cos(gamma)
+    + 0.070257 * Math.sin(gamma)
+    - 0.006758 * Math.cos(2 * gamma)
+    + 0.000907 * Math.sin(2 * gamma)
+    - 0.002697 * Math.cos(3 * gamma)
+    + 0.00148 * Math.sin(3 * gamma);
+
+  // Approximate equation of time
+  const eqTime = 229.18 * (
+    0.000075
+    + 0.001868 * Math.cos(gamma)
+    - 0.032077 * Math.sin(gamma)
+    - 0.014615 * Math.cos(2 * gamma)
+    - 0.040849 * Math.sin(2 * gamma)
+  );
+
+  const decimalHour = hour + minute / 60;
+
+  const timeCorrection =
+    eqTime + 4 * (lon - 15 * offset);
+
+  const solarMinutes =
+    decimalHour * 60 + timeCorrection;
+
+  const solarHourAngle =
+    (solarMinutes / 4 - 180) * Math.PI / 180;
+
+  const latitude = lat * Math.PI / 180;
+
+  const sinElevation =
+    Math.sin(latitude) * Math.sin(declination) +
+    Math.cos(latitude) * Math.cos(declination) *
+    Math.cos(solarHourAngle);
+
+  const elevation = Math.asin(
+    Math.max(-1, Math.min(1, sinElevation))
+  );
+
+  const azimuth = Math.atan2(
+    Math.sin(solarHourAngle),
+    Math.cos(solarHourAngle) * Math.sin(latitude) -
+    Math.tan(declination) * Math.cos(latitude)
+  );
+
+  let bearing = (azimuth * 180 / Math.PI + 180 + 360) % 360;
+
+  return {
+    elevation: elevation * 180 / Math.PI,
+    bearing,
+    solarMinutes
+  };
+}
+
+function calculate() {
+  const lat = Number($("latitude").value);
+  const lon = Number($("longitude").value);
+  const height = Number($("height").value);
+  const offset = Number($("offset").value);
+  const dateValue = $("date").value;
+  const timeValue = $("time").value;
+
+  if (
+    !Number.isFinite(lat) || lat < -90 || lat > 90 ||
+    !Number.isFinite(lon) || lon < -180 || lon > 180 ||
+    !Number.isFinite(height) || height <= 0 ||
+    !Number.isFinite(offset) || offset < -12 || offset > 14 ||
+    !dateValue || !timeValue
+  ) {
+    $("status").textContent =
+      "Please enter valid location, date, time and height values.";
+    return;
+  }
+
+  const [hour, minute] = timeValue.split(":").map(Number);
+  const date = new Date(dateValue + "T12:00:00");
+
+  const sun = calculateSun(
+    lat, lon, date, hour, minute, offset
+  );
+
+  const elevation = sun.elevation;
+  const aboveHorizon = elevation > 0;
+
+  const shadowLength = aboveHorizon
+    ? height / Math.tan(elevation * Math.PI / 180)
+    : null;
+
+  currentResult = {
+    date: dateValue,
+    time: timeValue,
+    elevation,
+    shadowLength,
+    bearing: sun.bearing,
+    height,
+    lat,
+    lon
+  };
+
+  $("elevation").textContent = elevation.toFixed(1) + "°";
+  $("shadow").textContent = aboveHorizon
+    ? (shadowLength > 9999 ? "Very long" : shadowLength.toFixed(1) + " cm")
+    : "No daylight";
+
+  $("bearing").textContent = sun.bearing.toFixed(1) + "°";
+
+  $("status").textContent = aboveHorizon
+    ? "The Sun is above the horizon. The displayed shadow is an estimate."
+    : "The Sun is below the horizon at this selected time.";
+
+  drawDial(currentResult);
+}
+
+function drawDial(result) {
+  const canvas = $("dial");
+  const ctx = canvas.getContext("2d");
+
+  const w = canvas.width;
+  const h = canvas.height;
+  const cx = w / 2;
+  const cy = h / 2 + 15;
+  const radius = 165;
+
+  ctx.clearRect(0, 0, w, h);
+
+  ctx.fillStyle = "#faf9f3";
+  ctx.fillRect(0, 0, w, h);
+
+  // Dial face
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.fillStyle = "#f0ead9";
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#234b3c";
+  ctx.stroke();
+
+  // Direction labels and hour lines
+  const directions = [
+    ["N", 0], ["E", 90], ["S", 180], ["W", 270]
+  ];
+
+  directions.forEach(([label, angle]) => {
+    const rad = (angle - 90) * Math.PI / 180;
+    ctx.fillStyle = "#234b3c";
+    ctx.font = "bold 17px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(
+      label,
+      cx + Math.cos(rad) * (radius + 20),
+      cy + Math.sin(rad) * (radius + 20) + 6
+    );
+  });
+
+  for (let i = 0; i < 24; i++) {
+    const angle = i * Math.PI / 12 - Math.PI / 2;
+    const inner = radius - 12;
+    const outer = radius;
+
+    ctx.beginPath();
+    ctx.moveTo(
+      cx + Math.cos(angle) * inner,
+      cy + Math.sin(angle) * inner
+    );
+    ctx.lineTo(
+      cx + Math.cos(angle) * outer,
+      cy + Math.sin(angle) * outer
+    );
+    ctx.strokeStyle = "#8b9b8e";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Gnomon
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx - 12, cy + 35);
+  ctx.lineTo(cx + 12, cy + 35);
+  ctx.closePath();
+  ctx.fillStyle = "#234b3c";
+  ctx.fill();
+
+  // Shadow direction: opposite the Sun's bearing
+  if (result.elevation > 0) {
+    const shadowAngle =
+      (result.bearing + 180 - 90) * Math.PI / 180;
+
+    const visualLength = Math.min(
+      125,
+      result.shadowLength * 2
+    );
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(
+      cx + Math.cos(shadowAngle) * visualLength,
+      cy + Math.sin(shadowAngle) * visualLength
+    );
+    ctx.strokeStyle = "#d77b42";
+    ctx.lineWidth = 7;
+    ctx.lineCap = "round";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = "#d77b42";
+    ctx.fill();
+  }
+
+  ctx.fillStyle = "#718078";
+  ctx.font = "12px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("NORTH-ALIGNED DIAL MODEL", cx, 25);
+}
+
+function saveObservation() {
+  if (!currentResult) {
+    $("status").textContent =
+      "Calculate the Sun position before saving an observation.";
+    return;
+  }
+
+  observations.push({...currentResult});
+  renderHistory();
+  $("status").textContent = "Observation saved for this session.";
+}
+
+function renderHistory() {
+  $("historyText").hidden = observations.length > 0;
+  $("historyTable").hidden = observations.length === 0;
+
+  $("historyBody").innerHTML = observations.map(item => `
+    <tr>
+      <td>${item.date}</td>
+      <td>${item.time}</td>
+      <td>${item.elevation.toFixed(1)}°</td>
+      <td>${item.shadowLength === null
+        ? "No daylight"
+        : item.shadowLength.toFixed(1) + " cm"}</td>
+    </tr>
+  `).join("");
+}
+
+function downloadCSV() {
+  if (observations.length === 0) {
+    $("status").textContent =
+      "Save at least one observation before exporting.";
+    return;
+  }
+
+  const headings = [
+    "Date", "Time", "Latitude", "Longitude",
+    "Gnomon Height (cm)", "Elevation (degrees)",
+    "Shadow Length (cm)", "Shadow Bearing (degrees)"
+  ];
+
+  const rows = observations.map(item => [
+    item.date,
+    item.time,
+    item.lat,
+    item.lon,
+    item.height,
+    item.elevation.toFixed(2),
+    item.shadowLength === null
+      ? "No daylight"
+      : item.shadowLength.toFixed(2),
+    item.bearing.toFixed(2)
+  ]);
+
+  const csv = [headings, ...rows]
+    .map(row => row.join(","))
+    .join("\n");
+
+  const blob = new Blob([csv], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "solar-observations.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+$("date").value = new Date().toISOString().slice(0, 10);
+calculate();
+</script>
+
+</body>
+</html>
